@@ -1,0 +1,27 @@
+generated: '2026-09-19'
+method: searched
+probe: true
+signals: {}
+note: >-
+  No horizontal-regime signal carries publishable substance. The provider's entire public surface is two agent
+  cards, four GitHub repositories and their READMEs; there is no privacy policy, terms of service, accessibility
+  statement, subprocessor list, DPA, data-residency statement, SBOM, transparency report, DSR channel or
+  notice-and-action flow anywhere reachable. The registrable domain songt50.us answers Cloudflare 522 on every
+  path, so the conventional legal paths could not be read even if they existed; the two agent hosts return their
+  real 404 for all of them. The only statement touching the regimes is the READMEs' note that the hosted data
+  servers hold the operator's data.go.kr/ECOS keys server-side (a credential-handling fact, not a regulatory
+  artifact). signals is empty by measurement.
+probes:
+- {url: https://songt50.us/privacy, status: 522}
+- {url: https://songt50.us/terms, status: 522}
+- {url: https://songt50.us/accessibility, status: 522}
+- {url: https://songt50.us/legal/subprocessors, status: 522}
+- {url: https://songt50.us/legal/dpa, status: 522}
+- {url: https://songt50.us/security, status: 522}
+- {url: https://songt50.us/transparency, status: 522}
+- {url: https://publicdata-agent.songt50.us/privacy, status: 404}
+- {url: https://publicdata-agent.songt50.us/accessibility, status: 404}
+- {url: https://publicdata-agent.songt50.us/legal/subprocessors, status: 404}
+- {url: https://publicdata-agent.songt50.us/security/sbom, status: 404}
+- {url: https://publicdata-agent.songt50.us/.well-known/security.txt, status: 404}
+- {url: https://github.com/SongT-50/korean-public-data-mcp, status: 200, note: README + MIT LICENSE; no privacy, terms or compliance content}

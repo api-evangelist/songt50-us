@@ -1,0 +1,68 @@
+generated: '2026-09-19'
+method: probed
+source: live probes of the A2A hosts and MCP endpoints plus the provider's server.json, server.py and README files
+docs:
+- https://github.com/SongT-50/korean-public-data-mcp
+- https://github.com/SongT-50/korean-news-mcp
+standards:
+- id: a2a
+  name: Agent2Agent Protocol
+  version: '0.3.0 (card); graded against A2A 1.0.0 AgentCard shape'
+  conforms: true
+  evidence: >-
+    Both agent cards pass the three hard checks (capabilities object, protocolVersion present, skills array) and
+    carry preferredTransport/defaultInputModes/defaultOutputModes — grade conformant; see a2a/songt50-us-a2a.yml.
+    The JSON-RPC endpoints answer tasks/get for an unknown id with the A2A-defined -32001 TaskNotFoundError.
+  source: https://publicdata-agent.songt50.us/.well-known/agent-card.json
+- id: json-rpc-2.0
+  name: JSON-RPC 2.0
+  conforms: true
+  evidence: >-
+    POST to https://publicdata-agent.songt50.us and https://news-agent.songt50.us with a JSON-RPC 2.0 request
+    returned well-formed JSON-RPC 2.0 error objects ({"jsonrpc":"2.0","id":1,"error":{"code":-32001,...}} and
+    -32603 for agent/getAuthenticatedExtendedCard). Probed 2026-09-19.
+- id: mcp
+  name: Model Context Protocol (Streamable HTTP)
+  conforms: null
+  evidence: >-
+    Claimed by the provider — four server.json manifests against the 2025-12-11 server schema, each declaring a
+    streamable-http remote, and four active entries in the official MCP registry. NOT verifiable on 2026-09-19:
+    every hosted endpoint returned 503 Service Suspended before initialize could complete, so protocol conformance
+    of the live servers is unobserved. The code uses the reference Python SDK (mcp>=1.0.0, FastMCP).
+  source: https://registry.modelcontextprotocol.io/v0/servers?search=io.github.SongT-50
+- id: oauth2
+  conforms: false
+  evidence: No OAuth 2.0 is used or documented; the A2A cards declare no securitySchemes, the MCP READMEs say no API key is required, and /.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource are absent (404 on the A2A hosts; MCP hosts suspended).
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration 404 on both A2A hosts; nothing documented.
+- id: rfc9457
+  name: Problem Details for HTTP APIs
+  conforms: false
+  evidence: Errors are JSON-RPC 2.0 error objects, not application/problem+json; no HTTP-level error catalog is published.
+- id: rfc8615-well-known
+  name: RFC 8615 well-known URIs
+  conforms: true
+  evidence: The A2A agent card is served at the registered /.well-known/agent-card.json path on both agent hosts (and the legacy /.well-known/agent.json).
+- id: openapi
+  conforms: false
+  evidence: No OpenAPI/Swagger document at /openapi.json, /openapi.yaml, /swagger.json on any host (404 on the A2A hosts; 522 on the apex; 503 on the MCP hosts) and none in the four GitHub repositories.
+- id: pagination
+  conforms: false
+  evidence: Tools take a count/num_results ceiling (max 20 for news, 100 for stock/agriculture) and return a single page; no cursor or offset parameter exists in any tool signature.
+- id: idempotency
+  conforms: null
+  evidence: Not applicable — every A2A skill and MCP tool is a read; there is no write surface to protect.
+domain_standards:
+  note: >-
+    No domain standard is declared by the contract. The surfaces aggregate Korean government open data (data.go.kr,
+    AirKorea, Bank of Korea ECOS, KRX via data.go.kr, the national wholesale-market auction feed) and news RSS; the
+    provider re-exposes them as MCP tools and A2A skills without adopting a sector schema (no OGC, no SDMX for the
+    ECOS statistics, no FIX/FIXatdl for the stock data, no NewsML for news). Reward-only: none is asserted.
+probes:
+- {url: https://publicdata-agent.songt50.us/.well-known/oauth-authorization-server, status: 404}
+- {url: https://publicdata-agent.songt50.us/.well-known/oauth-protected-resource, status: 404}
+- {url: https://publicdata-agent.songt50.us/.well-known/openid-configuration, status: 404}
+- {url: https://publicdata-agent.songt50.us/openapi.json, status: 404}
+- {url: https://news-agent.songt50.us/openapi.json, status: 404}
+- {url: https://korean-public-data-mcp.onrender.com/mcp, status: 503, note: initialize not answered — Service Suspended}

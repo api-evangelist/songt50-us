@@ -1,0 +1,32 @@
+generated: '2026-09-19'
+method: searched
+source: https://raw.githubusercontent.com/SongT-50/korean-news-mcp/master/mcpize.yaml
+docs:
+- https://github.com/SongT-50/korean-news-mcp#readme
+- https://github.com/SongT-50/korean-public-data-mcp#readme
+limit_count: 0
+exhaustion_status: null
+headers:
+  on_exhaustion: []
+  on_success: []
+  note: >-
+    No rate limit is documented for the A2A agents or for the directly hosted MCP endpoints, and none was
+    observable — the A2A hosts answered two probes each without any RateLimit-*, X-RateLimit-* or Retry-After
+    header, and the MCP hosts were suspended (503). Being JSON-RPC surfaces, neither would signal exhaustion with
+    HTTP 429 semantics unless the platform in front did.
+limits: []
+marketplace_quotas:
+  note: >-
+    The provider's mcpize.yaml for the news server declares per-plan quotas for the MCPize-hosted listing only —
+    Free 20 calls/day, Pro 500 calls/day, Enterprise unlimited (see plans/songt50-us-plans-pricing.yml). These
+    are MCPize marketplace quotas and do not apply to the onrender.com endpoints or the A2A agents. The public-data
+    mcpize.yaml declares pricing model free with no quota.
+upstream_limits:
+  note: >-
+    The READMEs say the Korean government upstreams (data.go.kr, ECOS) are free with daily call limits that are
+    "sufficient for personal use" but state no number; the servers mitigate them with in-process caches (TTLs
+    recorded in conventions/songt50-us-conventions.yml). When self-hosting, the operator's own upstream key
+    carries those limits.
+probes:
+- {url: https://publicdata-agent.songt50.us/, method: POST, status: 200, note: 'no rate-limit headers in the response (date, content-type, server, cf-ray only)'}
+- {url: https://news-agent.songt50.us/, method: POST, status: 200, note: no rate-limit headers}

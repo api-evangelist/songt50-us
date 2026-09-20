@@ -1,0 +1,60 @@
+generated: '2026-09-19'
+method: probed
+source: live JSON-RPC probes of the A2A hosts plus the provider's server.py, mcpize.yaml and README files
+docs:
+- https://github.com/SongT-50/korean-public-data-mcp#readme
+- https://github.com/SongT-50/korean-news-mcp#readme
+summary: >-
+  Two protocol surfaces, both read-only and anonymous: A2A JSON-RPC 2.0 at the root of each agent host (POST only;
+  GET returns 405) and MCP Streamable HTTP at /mcp on each onrender.com host (suspended when probed). There is no
+  REST API, so REST conventions (pagination, expansion, versioning headers, request ids) do not exist; what follows
+  is what the protocols and the provider's code actually specify.
+auth:
+  style: none
+  see: authentication/songt50-us-authentication.yml
+write_surface:
+  exists: false
+  note: >-
+    Every A2A skill (weather, air_quality, real_estate, economic_stats, business_check; korean_news, tech_news,
+    news_search, trending, daily_briefing) and every MCP tool (25 across four servers) is a read over public data
+    or news feeds. Nothing creates, updates, deletes, pays or sends.
+idempotency:
+  coverage: na
+  scope: []
+  header: null
+  note: Not applicable — no mutating operation exists. Repeating any call is safe by construction; results may differ only because the upstream data changed or a cache entry expired.
+reversibility:
+  status: na
+  operations: []
+  note: Not applicable — no write to reverse. An agent acting through these surfaces cannot change any state it would later need to undo.
+dry_run_mode:
+  status: na
+  note: Not applicable — reads only.
+pagination:
+  style: none
+  note: 'Tools accept a result ceiling (count: default 10, max 20 for news tools; num_results: default 20-100, max 100 for stock and agriculture tools) and return one page. No cursor, offset or next-link.'
+errors:
+  envelope: JSON-RPC 2.0 error object ({"jsonrpc":"2.0","id":<id>,"error":{"code":<int>,"message":<str>}}) delivered with HTTP 200
+  observed: [-32001 Task not found (A2A TaskNotFoundError), -32603 Authenticated card not supported]
+  see: errors/songt50-us-problem-types.yml
+caching:
+  note: >-
+    The data servers cache upstream responses in-process with per-domain TTLs read from server.py: public data —
+    weather 600 s, air quality 180 s, real-estate trades 86,400 s, economic statistics 3,600 s, business
+    registration 86,400 s; stock — realtime 300 s, daily 3,600 s, stock list 86,400 s; agriculture — realtime
+    120 s, daily 3,600 s, market list 86,400 s. Stock quotes are documented as previous-close, not intraday.
+    No Cache-Control or ETag semantics exist at the protocol layer.
+rate_limits:
+  signaling: none
+  see: rate-limits/songt50-us-rate-limits.yml
+request_tracing:
+  header: null
+  note: Correlation is by JSON-RPC id only.
+versioning:
+  style: none in the wire protocol; version 1.0.0 on cards and server manifests
+  see: lifecycle/songt50-us-lifecycle.yml
+transport:
+  a2a: {binding: JSONRPC over HTTPS, endpoint: host root, methods: [POST], get_response: 405 Method Not Allowed, streaming: false, push_notifications: false}
+  mcp: {binding: Streamable HTTP, endpoint: /mcp, local: stdio via python server.py, alt: sse via MCP_TRANSPORT (agriculture README), status_when_probed: 503 Service Suspended}
+language:
+  note: Tool descriptions and many argument vocabularies are Korean (categories 속보/정치/경제…, city and district names in Hangul, indicator names such as 기준금리); the news tools accept language ko or en. An agent should pass Korean place and indicator names as the tools document them.

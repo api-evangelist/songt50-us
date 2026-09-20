@@ -1,0 +1,34 @@
+generated: '2026-09-19'
+method: probed
+source: live JSON-RPC probes of both A2A hosts plus the agent cards, server.json/server.py/README of the four MCP repositories
+docs:
+- https://github.com/SongT-50/korean-public-data-mcp#readme
+- https://github.com/SongT-50/korean-news-mcp#readme
+summary: >-
+  Every surface sapjilcoding publishes is anonymous. The two A2A agent cards declare no securitySchemes and no
+  security requirements, and their JSON-RPC endpoints answered unauthenticated POSTs on 2026-09-19. The MCP
+  servers document "no API key required" for the news server and, for the data servers, hold the upstream
+  data.go.kr and Bank of Korea ECOS keys server-side on the hosted deployment ("the remote server's API keys are
+  configured on the server; you need your own keys only for a local install"); no MCP-level credential, OAuth
+  authorization server, protected-resource metadata or dynamic client registration exists. There is no signup,
+  no developer portal and no key issuance of any kind.
+schemes: []
+scheme_count: 0
+surfaces:
+- surface: A2A agents (publicdata-agent.songt50.us, news-agent.songt50.us)
+  auth: none
+  evidence: cards carry no securitySchemes/security; POST tasks/get without credentials returned a JSON-RPC -32001 (not a 401/403); agent/getAuthenticatedExtendedCard returns -32603 "Authenticated card not supported"
+- surface: MCP servers (four onrender.com endpoints)
+  auth: none
+  evidence: 'READMEs: "API 키 불필요" (news); data servers read DATA_GO_KR_API_KEY / ECOS_API_KEY from the server environment (render.yaml envVars sync false) and expose no credential to the client; endpoints were suspended (503) so no live challenge could be observed'
+- surface: self-hosted MCP (local stdio)
+  auth: operator-supplied upstream keys
+  evidence: '.env.example lists DATA_GO_KR_API_KEY and ECOS_API_KEY (free keys from data.go.kr and ecos.bok.or.kr); these authenticate the server to the Korean government upstreams, not the client to the server'
+upstream_credentials:
+- {name: DATA_GO_KR_API_KEY, issuer: https://www.data.go.kr, used_by: [korean-public-data-mcp, korean-stock-mcp, korean-agriculture-mcp], note: free; instant approval per README}
+- {name: ECOS_API_KEY, issuer: https://ecos.bok.or.kr/api, used_by: [korean-public-data-mcp], note: free}
+probes:
+- {url: https://publicdata-agent.songt50.us/, method: POST tasks/get (no credentials), status: 200, response: '{"error":{"code":-32001,"message":"Task not found"}}'}
+- {url: https://news-agent.songt50.us/, method: POST tasks/get (no credentials), status: 200, response: '{"error":{"code":-32001,"message":"Task not found"}}'}
+- {url: https://publicdata-agent.songt50.us/.well-known/oauth-protected-resource, status: 404}
+- {url: https://publicdata-agent.songt50.us/.well-known/oauth-authorization-server, status: 404}

@@ -1,18 +1,248 @@
 aid: songt50-us
 name: sapjilcoding
-description: 'sapjilcoding is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'sapjilcoding (삽질코딩, GitHub SongT-50) is a Korean independent maker — Song Tae-Eun, a Daejeon wholesale
+  produce market director building AI tools for public data — that publishes two live Agent2Agent (A2A) agents on
+  its own domain songt50.us and four open-source Model Context Protocol servers listed in the official MCP registry.
+  The Korean Public Data Agent answers weather, air quality, apartment prices, Bank of Korea data and
+  business-registration checks; the Korean News Agent searches Korean and global tech news. The MCP servers — Korean
+  Public Data, Korean News Hub, Korean Stock Market Data and Korean Agriculture Market Data (25 tools, Python FastMCP,
+  MIT) — wrap data.go.kr, AirKorea, Bank of Korea ECOS, KRX and the national wholesale-market auction feed. Every
+  surface is read-only, anonymous and free; no OpenAPI or REST contract exists. On 2026-09-19 both A2A agents were
+  live while all four hosted MCP endpoints were suspended (HTTP 503) and the apex site returned Cloudflare 522.'
+image: https://raw.githubusercontent.com/SongT-50/korean-public-data-mcp/master/assets/logo.svg
 url: https://raw.githubusercontent.com/api-evangelist/songt50-us/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:a2a-registry
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-09-19 (local-v3; was a2a-registry harvest stub)
 specificationVersion: '0.20'
 created: '2026-09-19'
 modified: '2026-09-19'
 tags:
-- Company
-apis: []
+- Agents
+- A2A
+- MCP
+- Open Data
+- Government Data
+- News
+- Weather
+- Air Quality
+- Real Estate
+- Economic Statistics
+- Stock Market
+- Agriculture
+- Korea
+- agent-native
+tags_raw:
+- Agents
+- A2A
+- MCP
+- Open data
+- Government data
+- News
+- Weather
+- Air quality
+- Real estate
+- Economic statistics
+- Stock market
+- Agriculture
+- Korea
+- Agent-native
+apis:
+- aid: songt50-us:korean-public-data-agent
+  name: Korean Public Data Agent (A2A)
+  description: 'Agent2Agent agent at https://publicdata-agent.songt50.us — a JSON-RPC 2.0 endpoint at the host root
+    (POST only) with an A2A 0.3.0 agent card at /.well-known/agent-card.json and the legacy /.well-known/agent.json.
+    Five text/plain skills: Korea Weather Forecast (25 cities), Korea Air Quality (PM10/PM2.5/ozone), Korea Apartment
+    Prices (Seoul districts and major cities), Korea Economic Statistics (base rate, CPI, unemployment, GDP, exports,
+    imports, KRW/USD, KOSPI) and Business Registration Check. Anonymous; streaming and push notifications false; no
+    extended card. Live on 2026-09-19 (tasks/get for an unknown id returned A2A -32001 Task not found). Listed on
+    a2aregistry.org since 2026-03-07.'
+  humanURL: https://github.com/SongT-50/korean-public-data-mcp
+  baseURL: https://publicdata-agent.songt50.us
+  tags:
+  - A2A
+  - Open Data
+  - Weather
+  - Air Quality
+  - Real Estate
+  - Economic Statistics
+  - agent-native
+  properties:
+  - type: AgentCard
+    url: a2a/songt50-us-a2a.yml
+  - type: AgentCard
+    name: A2A Agent Card (provider-hosted, canonical path)
+    url: https://publicdata-agent.songt50.us/.well-known/agent-card.json
+  - type: AgentCard
+    name: A2A Agent Card (provider-hosted, legacy path registered on a2aregistry.org)
+    url: https://publicdata-agent.songt50.us/.well-known/agent.json
+  - type: Documentation
+    name: Companion MCP server README (same data surface; the agent publishes no docs of its own)
+    url: https://github.com/SongT-50/korean-public-data-mcp
+  image: https://raw.githubusercontent.com/SongT-50/korean-public-data-mcp/master/assets/logo.svg
+- aid: songt50-us:korean-news-agent
+  name: Korean News Agent (A2A)
+  description: 'Agent2Agent agent at https://news-agent.songt50.us — a JSON-RPC 2.0 endpoint at the host root (POST
+    only) with an A2A 0.3.0 agent card at /.well-known/agent-card.json and /.well-known/agent.json. Five text/plain
+    skills: Korean News Search by category, Global Tech News (AI, Claude, OpenAI, MCP, startups, cloud), Keyword News
+    Search (Korean or English), Trending Headlines and Daily News Briefing. "Powered by Korean News MCP". Anonymous;
+    streaming and push notifications false. Live on 2026-09-19. Listed on a2aregistry.org since 2026-03-07.'
+  humanURL: https://github.com/SongT-50/korean-news-mcp
+  baseURL: https://news-agent.songt50.us
+  tags:
+  - A2A
+  - News
+  - Korea
+  - agent-native
+  properties:
+  - type: AgentCard
+    url: a2a/songt50-us-a2a.yml
+  - type: AgentCard
+    name: A2A Agent Card (provider-hosted, canonical path)
+    url: https://news-agent.songt50.us/.well-known/agent-card.json
+  - type: AgentCard
+    name: A2A Agent Card (provider-hosted, legacy path registered on a2aregistry.org)
+    url: https://news-agent.songt50.us/.well-known/agent.json
+  - type: Documentation
+    name: Companion MCP server README (same data surface)
+    url: https://github.com/SongT-50/korean-news-mcp
+  image: https://raw.githubusercontent.com/SongT-50/korean-news-mcp/master/assets/logo.svg
+- aid: songt50-us:korean-public-data-mcp
+  name: Korean Public Data MCP Server
+  description: 'Model Context Protocol server io.github.SongT-50/korean-public-data-mcp (official MCP registry, active,
+    1.0.0, published 2026-03-08): six read-only tools over Korean government open data — check_business_registration
+    (National Tax Service, batch up to 100), get_real_estate_trades (MOLIT apartment transactions by district and
+    month), get_weather_forecast (KMA, 25 cities, 72 h), get_air_quality (AirKorea, 15 locations), get_economic_stats
+    (Bank of Korea ECOS: base rate, CPI, unemployment, GDP, exports, imports, KRW/USD, KOSPI) and
+    list_supported_options. Hosted Streamable HTTP remote at https://korean-public-data-mcp.onrender.com/mcp with the
+    upstream keys held server-side; local stdio run from source needs the operator''s own data.go.kr and ECOS keys.
+    Python FastMCP, MIT. The hosted endpoint returned HTTP 503 Service Suspended on 2026-09-19.'
+  humanURL: https://github.com/SongT-50/korean-public-data-mcp
+  baseURL: https://korean-public-data-mcp.onrender.com/mcp
+  tags:
+  - MCP
+  - Open Data
+  - Government Data
+  - Weather
+  - Air Quality
+  - Real Estate
+  - Economic Statistics
+  - agent-native
+  properties:
+  - type: MCPServer
+    url: mcp/songt50-us-mcp.yml
+  - type: MCPServer
+    name: Hosted Streamable HTTP endpoint (suspended when probed)
+    url: https://korean-public-data-mcp.onrender.com/mcp
+  - type: MCPServer
+    name: server.json (MCP registry manifest)
+    url: https://raw.githubusercontent.com/SongT-50/korean-public-data-mcp/master/server.json
+  - type: SourceCode
+    url: https://github.com/SongT-50/korean-public-data-mcp
+  - type: Documentation
+    url: https://github.com/SongT-50/korean-public-data-mcp
+  - type: X-Marketplace
+    name: MCPize listing
+    url: https://mcpize.com/mcp/korean-public-data
+  image: https://raw.githubusercontent.com/SongT-50/korean-public-data-mcp/master/assets/logo.svg
+- aid: songt50-us:korean-news-hub-mcp
+  name: Korean News Hub MCP Server
+  description: 'Model Context Protocol server io.github.SongT-50/korean-news-mcp (official MCP registry, active, 1.0.0,
+    published 2026-03-08): six read-only tools with no API key — korean_news (Naver/Google News by category: 속보,
+    정치, 경제, 사회, IT, 세계, 연예, 스포츠), tech_news (AI, Claude, OpenAI, MCP, startups, dev, cloud from Hacker
+    News, TechCrunch, The Verge, Ars Technica, GeekNews), news_search (ko/en keyword), trending, read_article (URL
+    body extraction) and daily_briefing. Hosted Streamable HTTP remote at https://korean-news-mcp.onrender.com/mcp;
+    local stdio run from source; also listed on MCPize with Free (20 calls/day), Pro ($9.99/month, 500/day) and
+    Enterprise ($29.99/month) marketplace plans. Python FastMCP, MIT. The hosted endpoint returned HTTP 503 Service
+    Suspended on 2026-09-19.'
+  humanURL: https://github.com/SongT-50/korean-news-mcp
+  baseURL: https://korean-news-mcp.onrender.com/mcp
+  tags:
+  - MCP
+  - News
+  - Korea
+  - agent-native
+  properties:
+  - type: MCPServer
+    url: mcp/songt50-us-mcp.yml
+  - type: MCPServer
+    name: Hosted Streamable HTTP endpoint (suspended when probed)
+    url: https://korean-news-mcp.onrender.com/mcp
+  - type: MCPServer
+    name: server.json (MCP registry manifest)
+    url: https://raw.githubusercontent.com/SongT-50/korean-news-mcp/master/server.json
+  - type: SourceCode
+    url: https://github.com/SongT-50/korean-news-mcp
+  - type: Documentation
+    url: https://github.com/SongT-50/korean-news-mcp
+  - type: GettingStarted
+    name: SETUP.md
+    url: https://github.com/SongT-50/korean-news-mcp/blob/master/SETUP.md
+  - type: X-Marketplace
+    name: MCPize listing
+    url: https://mcpize.com/mcp/korean-news-hub
+  image: https://raw.githubusercontent.com/SongT-50/korean-news-mcp/master/assets/logo.svg
+- aid: songt50-us:korean-stock-market-mcp
+  name: Korean Stock Market Data MCP Server
+  description: 'Model Context Protocol server io.github.SongT-50/korean-stock-mcp (official MCP registry, active, 1.0.0,
+    published 2026-03-08): seven read-only tools over the data.go.kr Financial Services Commission / KRX services —
+    get_stock_price (previous close by name or 6-digit code), search_stock (KOSPI/KOSDAQ/KONEX), get_market_index,
+    get_price_trend (up to 30 days), get_dividend_info, compare_stocks and get_popular_stocks. Hosted Streamable HTTP
+    remote at https://korean-stock-mcp.onrender.com/mcp; local stdio run needs a data.go.kr key. The repository ships
+    server.py, server.json, Dockerfile and render.yaml but no README or LICENSE. The hosted endpoint returned HTTP 503
+    Service Suspended on 2026-09-19.'
+  humanURL: https://github.com/SongT-50/korean-stock-mcp
+  baseURL: https://korean-stock-mcp.onrender.com/mcp
+  tags:
+  - MCP
+  - Stock Market
+  - Open Data
+  - Korea
+  - agent-native
+  properties:
+  - type: MCPServer
+    url: mcp/songt50-us-mcp.yml
+  - type: MCPServer
+    name: Hosted Streamable HTTP endpoint (suspended when probed)
+    url: https://korean-stock-mcp.onrender.com/mcp
+  - type: MCPServer
+    name: server.json (MCP registry manifest)
+    url: https://raw.githubusercontent.com/SongT-50/korean-stock-mcp/master/server.json
+  - type: SourceCode
+    url: https://github.com/SongT-50/korean-stock-mcp
+  image: https://raw.githubusercontent.com/SongT-50/korean-public-data-mcp/master/assets/logo.svg
+- aid: songt50-us:korean-agriculture-market-mcp
+  name: Korean Agriculture Market Data MCP Server
+  description: 'Model Context Protocol server io.github.SongT-50/korean-agriculture-mcp (official MCP registry, active,
+    1.0.0, published 2026-03-08): six read-only tools over the data.go.kr national public wholesale-market real-time
+    auction API (32 markets, 22 product categories, 63,000+ records a day) — get_realtime_auction, search_product_price,
+    compare_market_prices, get_price_trend, get_market_list and get_auction_summary. Hosted Streamable HTTP remote at
+    https://korean-agriculture-mcp.onrender.com/mcp; local stdio (or SSE via MCP_TRANSPORT) run needs a data.go.kr
+    key. Python FastMCP, MIT (Copyright 2026 Song Tae-Eun). The hosted endpoint returned HTTP 503 Service Suspended
+    on 2026-09-19.'
+  humanURL: https://github.com/SongT-50/korean-agriculture-mcp
+  baseURL: https://korean-agriculture-mcp.onrender.com/mcp
+  tags:
+  - MCP
+  - Agriculture
+  - Open Data
+  - Korea
+  - agent-native
+  properties:
+  - type: MCPServer
+    url: mcp/songt50-us-mcp.yml
+  - type: MCPServer
+    name: Hosted Streamable HTTP endpoint (suspended when probed)
+    url: https://korean-agriculture-mcp.onrender.com/mcp
+  - type: MCPServer
+    name: server.json (MCP registry manifest)
+    url: https://raw.githubusercontent.com/SongT-50/korean-agriculture-mcp/master/server.json
+  - type: SourceCode
+    url: https://github.com/SongT-50/korean-agriculture-mcp
+  - type: Documentation
+    url: https://github.com/SongT-50/korean-agriculture-mcp
+  image: https://raw.githubusercontent.com/SongT-50/korean-public-data-mcp/master/assets/logo.svg
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -21,3 +251,49 @@ maintainers:
 common:
 - type: Website
   url: https://songt50.us/
+- type: GitHubOrganization
+  url: https://github.com/SongT-50
+- type: Documentation
+  name: Repository READMEs (the provider publishes no other documentation)
+  url: https://github.com/SongT-50/korean-public-data-mcp
+- type: SourceCode
+  url: https://github.com/SongT-50
+- type: YouTube
+  name: 삽질코딩 YouTube channel
+  url: https://www.youtube.com/channel/UCSHxaZHNDOrp0h0Ux8_6CVQ
+- type: AgentCard
+  url: a2a/songt50-us-a2a.yml
+- type: MCPServer
+  url: mcp/songt50-us-mcp.yml
+- type: MCPServer
+  name: Official MCP registry entries (four servers)
+  url: https://registry.modelcontextprotocol.io/v0/servers?search=io.github.SongT-50
+- type: WellKnown
+  url: well-known/songt50-us-well-known.yml
+- type: LLMsTxt
+  url: llms/songt50-us-llms.txt
+- type: Packages
+  url: packages/songt50-us-packages.yml
+- type: Conformance
+  url: conformance/songt50-us-conformance.yml
+- type: Lifecycle
+  url: lifecycle/songt50-us-lifecycle.yml
+- type: Authentication
+  url: authentication/songt50-us-authentication.yml
+- type: Conventions
+  url: conventions/songt50-us-conventions.yml
+- type: ErrorCatalog
+  url: errors/songt50-us-problem-types.yml
+- type: RateLimits
+  url: rate-limits/songt50-us-rate-limits.yml
+- type: Plans
+  url: plans/songt50-us-plans-pricing.yml
+- type: X-RegulatoryPosture
+  url: regulatory/songt50-us-regulatory-posture.yml
+- type: DomainSecurity
+  url: security/songt50-us-domain-security.yml
+x-enrichment:
+  date: '2026-09-19'
+  status: enriched
+  artifacts_added: 16
+  pass: local-v3

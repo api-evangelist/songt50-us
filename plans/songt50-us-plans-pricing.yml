@@ -1,0 +1,50 @@
+generated: '2026-09-19'
+method: searched
+source: https://raw.githubusercontent.com/SongT-50/korean-news-mcp/master/mcpize.yaml
+docs:
+- https://mcpize.com/mcp/korean-news-hub
+- https://mcpize.com/mcp/korean-public-data
+- https://github.com/SongT-50/korean-news-mcp#readme
+plan_count: 3
+currency: USD
+plans:
+- name: Free
+  applies_to: Korean News Hub via the MCPize marketplace listing
+  price: 0
+  currency: USD
+  billing_period: null
+  included_quota: 20 calls/day
+  overage: null
+  limits: {calls_per_day: 20}
+- name: Pro
+  applies_to: Korean News Hub via the MCPize marketplace listing
+  price: 9.99
+  currency: USD
+  billing_period: monthly
+  included_quota: 500 calls/day
+  overage: null
+  limits: {calls_per_day: 500}
+- name: Enterprise
+  applies_to: Korean News Hub via the MCPize marketplace listing
+  price: 29.99
+  currency: USD
+  billing_period: monthly
+  included_quota: unlimited
+  overage: null
+  limits: {calls_per_day: unlimited}
+free_surfaces:
+- {surface: A2A Korean Public Data Agent and Korean News Agent, price: free, signup: none, source: 'agent cards declare no security; READMEs say Price: Free'}
+- {surface: directly hosted MCP endpoints on onrender.com, price: free, signup: none, source: 'README badges "Price-Free", "API_Key-불필요"'}
+- {surface: Korean Public Data on MCPize, price: free, source: 'mcpize.yaml pricing.model: free'}
+- {surface: self-hosted from source, price: free (MIT), source: LICENSE files}
+note: >-
+  The only priced tiers sapjilcoding publishes are the three MCPize marketplace plans declared in the news
+  server's own mcpize.yaml (pricing.model freemium). The MCPize listing page itself renders its pricing tab
+  client-side, so the figures are recorded from the provider-authored config file in the public repository, not
+  from a rendered price page. Everything else — the A2A agents, the onrender.com MCP endpoints, the public-data
+  MCPize listing and the MIT-licensed source — is free with no account. No enterprise contact, no invoicing, no
+  usage-based overage exists.
+probes:
+- {url: https://raw.githubusercontent.com/SongT-50/korean-news-mcp/master/mcpize.yaml, status: 200}
+- {url: https://raw.githubusercontent.com/SongT-50/korean-public-data-mcp/master/mcpize.yaml, status: 200, note: 'pricing: {model: free}'}
+- {url: https://mcpize.com/mcp/korean-news-hub, status: 200, note: server-rendered HTML carries the description and author only; no prices in the served HTML}

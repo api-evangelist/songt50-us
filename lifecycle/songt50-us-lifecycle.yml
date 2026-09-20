@@ -1,0 +1,44 @@
+generated: '2026-09-19'
+method: searched
+source: https://registry.modelcontextprotocol.io/v0/servers?search=io.github.SongT-50
+docs:
+- https://github.com/SongT-50/korean-public-data-mcp
+- https://github.com/SongT-50/korean-news-mcp
+- https://a2aregistry.org/api/agents/13b680b9-0053-4b51-8e21-7f19df99cafc
+versioning:
+  scheme: semantic version string on the agent cards and MCP server manifests; no version in any URL
+  current: 1.0.0
+  current_versions:
+    a2a_agent_cards: 1.0.0 (protocolVersion 0.3.0), both agents
+    mcp_servers: 1.0.0 in server.json and the MCP registry for all four (published 2026-03-08, isLatest true)
+    repositories: no git tags or GitHub releases; default branch master; last pushes 2026-03-08 (all four MCP repos)
+  policy_published: false
+  note: >-
+    No versioning, compatibility or support policy is published anywhere. The agent cards and registry entries
+    have carried 1.0.0 since March 2026 and the source repositories have not been pushed since 2026-03-08, so the
+    surfaces are unchanged rather than versioned.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  note: No deprecation policy, no Sunset or Deprecation headers, no deprecated tools or skills documented.
+deprecated_operations: []
+status_page:
+  url: null
+  note: >-
+    No status page. Third-party health signals exist: a2aregistry.org reports both A2A agents is_healthy true with
+    24-hour uptime 38.8% and ~3.1 s average response on 2026-09-20, and its task_conformance check timed out at
+    ~16 s on 2026-09-19. All four hosted MCP endpoints were suspended on Render (HTTP 503, x-render-routing:
+    suspend) on 2026-09-19 while still listed active in the MCP registry; the apex songt50.us returned Cloudflare
+    522. The READMEs describe only a 30-60 s free-tier cold start, not a suspension.
+sla:
+  published: false
+  note: No SLA, uptime commitment or support channel beyond the GitHub repositories and a YouTube channel.
+observed_availability:
+- {surface: A2A Korean Public Data Agent, url: https://publicdata-agent.songt50.us, observed: '2026-09-19', status: live (JSON-RPC answered)}
+- {surface: A2A Korean News Agent, url: https://news-agent.songt50.us, observed: '2026-09-19', status: live (JSON-RPC answered)}
+- {surface: MCP Korean Public Data, url: https://korean-public-data-mcp.onrender.com/mcp, observed: '2026-09-19', status: 503 Service Suspended}
+- {surface: MCP Korean News Hub, url: https://korean-news-mcp.onrender.com/mcp, observed: '2026-09-19', status: 503 Service Suspended}
+- {surface: MCP Korean Stock Market, url: https://korean-stock-mcp.onrender.com/mcp, observed: '2026-09-19', status: 503 Service Suspended}
+- {surface: MCP Korean Agriculture Market, url: https://korean-agriculture-mcp.onrender.com/mcp, observed: '2026-09-19', status: 503 Service Suspended}
+- {surface: Website, url: https://songt50.us/, observed: '2026-09-19', status: 522 origin unreachable}

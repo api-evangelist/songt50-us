@@ -1,0 +1,39 @@
+generated: '2026-09-19'
+method: probed
+format: json-rpc-2.0
+source: live JSON-RPC probes of https://publicdata-agent.songt50.us and https://news-agent.songt50.us on 2026-09-19
+docs:
+- https://a2a-protocol.org/latest/specification/
+summary: >-
+  No error reference is published by the provider. Errors surface as JSON-RPC 2.0 error objects with HTTP 200;
+  the two below were observed live. Both A2A hosts behave identically. MCP-layer errors could not be observed
+  because every hosted endpoint returned 503 Service Suspended (text/html) before any JSON-RPC exchange; the FastMCP
+  servers would emit standard MCP JSON-RPC errors, but none was seen and none is recorded.
+problem_types:
+- code: -32001
+  title: Task not found
+  surface: A2A JSON-RPC (tasks/get, tasks/cancel)
+  http_status: 200
+  meaning: The task id is unknown to the agent — the A2A-defined TaskNotFoundError.
+  observed: '{"error":{"code":-32001,"message":"Task not found"},"id":1,"jsonrpc":"2.0"}'
+  remediation: Use the task id returned by message/send; tasks are not shared across the two agent hosts.
+- code: -32603
+  title: Authenticated card not supported
+  surface: A2A JSON-RPC (agent/getAuthenticatedExtendedCard)
+  http_status: 200
+  meaning: The agent serves no extended card; the public /.well-known card is the complete card.
+  observed: '{"error":{"code":-32603,"message":"Authenticated card not supported"},"id":1,"jsonrpc":"2.0"}'
+  remediation: Read /.well-known/agent-card.json and do not call the extended-card method.
+- code: 405
+  title: Method Not Allowed
+  surface: HTTP GET on the A2A endpoint root
+  http_status: 405
+  meaning: The JSON-RPC endpoint accepts POST only; the body is text/plain "Method Not Allowed".
+  remediation: POST a JSON-RPC 2.0 request with Content-Type application/json.
+- code: 503
+  title: Service Suspended
+  surface: every hosted MCP endpoint (onrender.com)
+  http_status: 503
+  meaning: The Render service is suspended host-wide (x-render-routing suspend); text/html body, not JSON-RPC. This is the platform, not the MCP server, answering.
+  remediation: Run the server locally from source (python server.py) or wait for the provider to restore the hosted deployment; do not retry-loop against the 503.
+count: 4

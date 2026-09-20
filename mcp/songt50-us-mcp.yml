@@ -1,0 +1,213 @@
+generated: '2026-09-19'
+method: searched
+status: published
+source: https://registry.modelcontextprotocol.io/v0/servers?search=io.github.SongT-50
+docs: https://github.com/SongT-50/korean-public-data-mcp
+summary: >-
+  sapjilcoding (GitHub SongT-50) publishes FOUR first-party MCP servers, each an open-source Python FastMCP
+  service (MIT) with a server.json in the repository and an entry in the official MCP registry (all four published
+  2026-03-08, status active, version 1.0.0, each declaring one streamable-http remote on onrender.com): Korean
+  Public Data (io.github.SongT-50/korean-public-data-mcp — 6 tools over data.go.kr, AirKorea and Bank of Korea
+  ECOS), Korean News Hub (korean-news-mcp — 6 tools over Naver/Google News RSS and tech feeds, no API key),
+  Korean Stock Market Data (korean-stock-mcp — 7 tools over the data.go.kr KRX services) and Korean Agriculture
+  Market Data (korean-agriculture-mcp — 6 tools over the data.go.kr wholesale-market real-time auction API). The
+  READMEs document both the hosted endpoint ("claude mcp add … --transport streamable-http https://<name>.onrender.com/mcp")
+  and a local stdio run from a clone ("claude mcp add … -- python server.py"); the data servers need the operator's
+  own data.go.kr / ECOS keys when run locally, while "the remote server's API keys are configured on the server".
+  PROBED 2026-09-19: every one of the four hosted endpoints returns HTTP 503 "Service Suspended" with
+  x-render-routing: suspend on every path (initialize, tools/list, /, /.well-known/*), i.e. the Render free-tier
+  services are suspended, not merely asleep (the READMEs warn only of a 30-60 s cold start). The tool lists below
+  are therefore read from the provider's own server.py, mcpize.yaml and README — provider-published, not live
+  introspection — and inputSchema detail is limited to the typed Python signatures those sources carry. The two
+  A2A agents on songt50.us (see a2a/) expose the public-data and news tool sets conversationally and WERE live.
+deployment:
+  mode: both
+  endpoint: https://korean-public-data-mcp.onrender.com/mcp
+  install: 'git clone https://github.com/SongT-50/korean-public-data-mcp.git && cd korean-public-data-mcp && pip install -r requirements.txt && claude mcp add korean-public-data -- python server.py'
+  package: https://github.com/SongT-50/korean-public-data-mcp
+  auth: none
+  verified: probed
+  probe: dead
+  note: >-
+    mode is `both` because the provider documents a hosted Streamable HTTP URL an MCP client POSTs to AND a local
+    stdio run from source (no npm/PyPI package exists — the PyPI project named korean-news-mcp belongs to a different
+    author, LogiStic1207/jespe, and is NOT this provider's). auth is `none` as documented ("API 키 불필요" for the
+    news server; the data servers hold their upstream keys server-side and no MCP-level credential, OAuth metadata
+    or protected-resource document exists). probe is `dead`: POST initialize and tools/list to the endpoint on
+    2026-09-19 returned 503 text/html "Service Suspended" (x-render-routing: suspend), and the same answer came back
+    for the other three hosts and for every path on them, slowly re-probed six seconds apart to rule out our own
+    burst. An MCP client cannot reach any of the four servers today; the registry still lists all four as active.
+    The endpoint recorded is the server that backs the primary A2A agent; the other three are in servers[].
+servers:
+- id: korean-public-data-mcp
+  name: Korean Public Data
+  registry_name: io.github.SongT-50/korean-public-data-mcp
+  registry_url: https://registry.modelcontextprotocol.io/v0/servers?search=io.github.SongT-50/korean-public-data-mcp
+  registry_published: '2026-03-08'
+  fastmcp_name: Korean Public Data
+  endpoint: https://korean-public-data-mcp.onrender.com/mcp
+  transport: streamable-http (hosted); stdio (local, MCP_TRANSPORT default); the code also accepts sse
+  repository: https://github.com/SongT-50/korean-public-data-mcp
+  license: MIT (Copyright (c) 2026 sapjil-coding)
+  marketplace: https://mcpize.com/mcp/korean-public-data
+  auth: none at the MCP layer; server-side DATA_GO_KR_API_KEY and ECOS_API_KEY when self-hosted
+  status: suspended
+  read_only: true
+  probe: {fetched: '2026-09-19', initialize: {http_status: 503, content_type: text/html; charset=utf-8, body: Service Suspended, header: 'x-render-routing: suspend'}, tools_list: {http_status: 503}}
+  upstreams:
+  - {name: 기상청 단기예보 (KMA VilageFcst), url: 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst'}
+  - {name: 국토교통부 아파트 실거래가 (MOLIT RTMS), url: 'http://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev/getRTMSDataSvcAptTradeDev'}
+  - {name: 에어코리아 대기질 (AirKorea), url: 'http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty'}
+  - {name: 국세청 사업자등록 상태조회 (NTS), url: 'https://api.odcloud.kr/api/nts-businessman/v1/status'}
+  - {name: 한국은행 ECOS 통계조회, url: 'https://ecos.bok.or.kr/api/StatisticSearch'}
+  cache_ttl_seconds: {weather: 600, air_quality: 180, real_estate: 86400, economic: 3600, business: 86400}
+  tools:
+  - name: check_business_registration
+    description: 사업자등록번호로 사업 상태를 조회합니다 (최대 100개 일괄; 하이픈 없는 10자리). Check business registration status by number, batch up to 100.
+    inputSchema: {type: object, properties: {business_numbers: {type: array, items: {type: string}}}, required: [business_numbers]}
+  - name: get_real_estate_trades
+    description: 아파트 실거래가를 조회합니다 — 서울 25개구 + 주요 경기/광역시, YYYYMM. Apartment sale prices by district and month.
+    inputSchema: {type: object, properties: {district: {type: string}, year_month: {type: string}}, required: [district, year_month]}
+  - name: get_weather_forecast
+    description: 도시별 단기 날씨 예보 (25개 도시, 최대 72시간). Weather forecast for 25 Korean cities.
+    inputSchema: {type: object, properties: {city: {type: string}, hours_ahead: {type: integer, default: 24}}, required: [city]}
+  - name: get_air_quality
+    description: 실시간 대기질 (PM10, PM2.5, 오존 등; 15개 지역). Real-time air quality for 15 locations.
+    inputSchema: {type: object, properties: {location: {type: string}}, required: [location]}
+  - name: get_economic_stats
+    description: 한국은행 경제통계 — 기준금리, 소비자물가지수, 실업률, GDP성장률, 수출액, 수입액, 원달러환율, 코스피. Bank of Korea statistics.
+    inputSchema: {type: object, properties: {indicator: {type: string}, period: {type: string, default: latest}}, required: [indicator]}
+  - name: list_supported_options
+    description: 지원하는 도시, 지역, 경제지표 목록. List supported cities, districts and indicators.
+    inputSchema: {type: object, properties: {}}
+- id: korean-news-mcp
+  name: Korean News Hub
+  registry_name: io.github.SongT-50/korean-news-mcp
+  registry_url: https://registry.modelcontextprotocol.io/v0/servers?search=io.github.SongT-50/korean-news-mcp
+  registry_published: '2026-03-08'
+  fastmcp_name: korean-news-hub
+  endpoint: https://korean-news-mcp.onrender.com/mcp
+  transport: streamable-http (hosted); stdio (local)
+  repository: https://github.com/SongT-50/korean-news-mcp
+  license: MIT (Copyright (c) 2026 sapjil-coding)
+  marketplace: https://mcpize.com/mcp/korean-news-hub
+  auth: none ("API 키 불필요, 무료")
+  status: suspended
+  read_only: true
+  probe: {fetched: '2026-09-19', initialize: {http_status: 503, body: Service Suspended, header: 'x-render-routing: suspend'}, tools_list: {http_status: 503}, slow_reprobe: {paths: ['/', /mcp, /.well-known/security.txt, /.well-known/oauth-protected-resource], interval_seconds: 6, http_status: 503}}
+  upstreams:
+  - {name: Naver News RSS (8 categories), url: null}
+  - {name: Google News Korea RSS, url: 'https://news.google.com/rss/'}
+  - {name: 'Hacker News, TechCrunch, The Verge, Ars Technica, GeekNews and AI outlets (RSS)', url: null}
+  tools:
+  - name: korean_news
+    description: 'Get Korean news by category (속보, 정치, 경제, 사회, IT, 세계, 연예, 스포츠).'
+    inputSchema: {type: object, properties: {category: {type: string, default: 속보}, count: {type: integer, default: 10, maximum: 20}}}
+  - name: tech_news
+    description: 'Get global AI/tech news by topic (AI, Claude, OpenAI, MCP, OpenClaw, 스타트업, 개발, 클라우드).'
+    inputSchema: {type: object, properties: {topic: {type: string, default: AI}, count: {type: integer, default: 10, maximum: 20}}}
+  - name: news_search
+    description: Search news by keyword in Korean or English.
+    inputSchema: {type: object, properties: {query: {type: string}, language: {type: string, enum: [ko, en], default: ko}, count: {type: integer, default: 10, maximum: 20}}, required: [query]}
+  - name: trending
+    description: Get current trending/headline news for Korea or global tech.
+    inputSchema: {type: object, properties: {scope: {type: string, enum: [korea, tech], default: korea}}}
+  - name: read_article
+    description: Read and extract article content from a URL.
+    inputSchema: {type: object, properties: {url: {type: string}}, required: [url]}
+  - name: daily_briefing
+    description: Generate a comprehensive daily news briefing (Korean headlines + AI/tech + Claude/Anthropic news).
+    inputSchema: {type: object, properties: {}}
+- id: korean-stock-mcp
+  name: Korean Stock Market Data
+  registry_name: io.github.SongT-50/korean-stock-mcp
+  registry_url: https://registry.modelcontextprotocol.io/v0/servers?search=io.github.SongT-50/korean-stock-mcp
+  registry_published: '2026-03-08'
+  fastmcp_name: Korean Stock Market
+  endpoint: https://korean-stock-mcp.onrender.com/mcp
+  transport: streamable-http (hosted); stdio (local)
+  repository: https://github.com/SongT-50/korean-stock-mcp
+  license: not stated (no LICENSE or README in the repository; server.py, server.json, Dockerfile, render.yaml only)
+  auth: none at the MCP layer; server-side DATA_GO_KR_API_KEY when self-hosted
+  status: suspended
+  read_only: true
+  probe: {fetched: '2026-09-19', initialize: {http_status: 503, body: Service Suspended}, tools_list: {http_status: 503}}
+  upstreams:
+  - {name: 금융위원회 주식시세정보 (data.go.kr 1160100), url: 'https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo'}
+  - {name: KRX 상장종목정보, url: 'https://apis.data.go.kr/1160100/service/GetKrxListedInfoService/getItemInfo'}
+  - {name: 주가지수시세, url: 'https://apis.data.go.kr/1160100/service/GetMarketIndexInfoService/getStockMarketIndex'}
+  - {name: 주식배당정보, url: 'https://apis.data.go.kr/1160100/service/GetStocDiviInfoService/getDiviInfo'}
+  cache_ttl_seconds: {realtime: 300, daily: 3600, stock_list: 86400}
+  tools:
+  - name: get_stock_price
+    description: 한국 주식 시세 조회 (종목명 또는 6자리 종목코드; 전일 종가 기준). Korean stock quote by name or code, previous close.
+    inputSchema: {type: object, properties: {stock_name: {type: string}, stock_code: {type: string}, date: {type: string}, market: {type: string}, num_results: {type: integer, default: 20}}}
+  - name: search_stock
+    description: 종목명 키워드로 KRX 상장종목 검색 (KOSPI/KOSDAQ/KONEX). Search listed stocks by keyword.
+    inputSchema: {type: object, properties: {keyword: {type: string}, market: {type: string, enum: ['', KOSPI, KOSDAQ, KONEX]}, num_results: {type: integer, default: 20, maximum: 100}}, required: [keyword]}
+  - name: get_market_index
+    description: KOSPI, KOSDAQ 등 주요 시장 지수 조회. Market index values.
+    inputSchema: {type: object, properties: {index_name: {type: string}, date: {type: string}, num_results: {type: integer, default: 20, maximum: 100}}}
+  - name: get_price_trend
+    description: 종목의 최근 N일간 주가 추이 (기본 7일, 최대 30일). Price trend over recent days.
+    inputSchema: {type: object, properties: {stock_name: {type: string}, stock_code: {type: string}, days: {type: integer, default: 7, maximum: 30}}}
+  - name: get_dividend_info
+    description: 주식 배당 정보 조회. Dividend information by company and fiscal year.
+    inputSchema: {type: object, properties: {company_name: {type: string}, year: {type: string}, num_results: {type: integer, default: 20, maximum: 100}}}
+  - name: compare_stocks
+    description: 여러 종목의 시세 비교 (쉼표 구분). Compare quotes for several stocks.
+    inputSchema: {type: object, properties: {stock_names: {type: string}, date: {type: string}}, required: [stock_names]}
+  - name: get_popular_stocks
+    description: 주요 인기 종목의 코드 목록. Codes of popular stocks.
+    inputSchema: {type: object, properties: {}}
+- id: korean-agriculture-mcp
+  name: Korean Agriculture Market Data
+  registry_name: io.github.SongT-50/korean-agriculture-mcp
+  registry_url: https://registry.modelcontextprotocol.io/v0/servers?search=io.github.SongT-50/korean-agriculture-mcp
+  registry_published: '2026-03-08'
+  fastmcp_name: Korean Agriculture Market
+  endpoint: https://korean-agriculture-mcp.onrender.com/mcp
+  transport: streamable-http (hosted); stdio (local); README also documents MCP_TRANSPORT=sse
+  repository: https://github.com/SongT-50/korean-agriculture-mcp
+  license: MIT (Copyright (c) 2026 Song Tae-Eun (higheun))
+  auth: none at the MCP layer; server-side DATA_GO_KR_API_KEY when self-hosted
+  status: suspended
+  read_only: true
+  probe: {fetched: '2026-09-19', initialize: {http_status: 503, body: Service Suspended}, tools_list: {http_status: 503}}
+  upstreams:
+  - {name: 전국 공영도매시장 실시간 경매정보 (data.go.kr 15141808), url: 'https://apis.data.go.kr/B552845/katRealTime2/trades2', docs: 'https://www.data.go.kr/data/15141808/openapi.do'}
+  cache_ttl_seconds: {realtime: 120, daily: 3600, market_list: 86400}
+  tools:
+  - name: get_realtime_auction
+    description: 전국 도매시장 실시간 경매 현황 (63,000건+/일; 시장코드·부류코드·정산일 필터). Real-time wholesale auction records.
+    inputSchema: {type: object, properties: {market_code: {type: string}, category_code: {type: string}, date: {type: string}, num_results: {type: integer, default: 50}}}
+  - name: search_product_price
+    description: 품목 키워드로 전국 도매시장 경매 가격 검색. Search auction prices by product keyword.
+    inputSchema: {type: object, properties: {product_keyword: {type: string}, market_code: {type: string}, date: {type: string}, num_results: {type: integer, default: 100}}, required: [product_keyword]}
+  - name: compare_market_prices
+    description: 특정 품목의 전국 도매시장 가격 비교. Compare a product's price across markets.
+    inputSchema: {type: object, properties: {product_keyword: {type: string}, date: {type: string}}, required: [product_keyword]}
+  - name: get_price_trend
+    description: 품목의 최근 N일간 가격 추이 (기본 7일, 최대 30일). Price trend for a product.
+    inputSchema: {type: object, properties: {product_keyword: {type: string}, market_code: {type: string}, days: {type: integer, default: 7, maximum: 30}}, required: [product_keyword]}
+  - name: get_market_list
+    description: 전국 공영 도매시장 목록과 부류(대분류) 코드. Wholesale markets and category codes.
+    inputSchema: {type: object, properties: {region: {type: string}}}
+  - name: get_auction_summary
+    description: 도매시장 경매 데이터의 부류별/시장별 통계 요약. Auction statistics by category and market.
+    inputSchema: {type: object, properties: {market_code: {type: string}, date: {type: string}}}
+tool_count: 25
+authorship: first-party (provider-built FastMCP code, provider-specific tool names, published under the provider's own registry namespace io.github.SongT-50)
+provenance:
+  tool_lists: 'read from server.py (FastMCP @mcp.tool signatures and docstrings) and mcpize.yaml on the master branch of each repository, 2026-09-19; not from live tools/list, which was unreachable'
+  endpoints: 'server.json remotes[] in each repository and the identical remotes[] in the official MCP registry'
+probes:
+- {url: https://korean-public-data-mcp.onrender.com/mcp, method: POST initialize, status: 503, note: 'text/html "Service Suspended", x-render-routing: suspend'}
+- {url: https://korean-news-mcp.onrender.com/mcp, method: POST initialize, status: 503}
+- {url: https://korean-stock-mcp.onrender.com/mcp, method: POST initialize, status: 503}
+- {url: https://korean-agriculture-mcp.onrender.com/mcp, method: POST initialize, status: 503}
+- {url: https://publicdata-agent.songt50.us/mcp, method: GET, status: 404, note: the A2A hosts do not serve MCP}
+- {url: https://news-agent.songt50.us/mcp, method: GET, status: 404}
+- {url: 'https://registry.modelcontextprotocol.io/v0/servers?search=io.github.SongT-50', status: 200, note: four servers, all status active, isLatest true, published 2026-03-08}
+- {url: https://mcpize.com/mcp/korean-news-hub, status: 200, note: marketplace listing "by Song Tae-Eun @ higheun, updated May 4 2026"; the tool and pricing tabs render client-side only}
+- {url: https://pypi.org/pypi/korean-news-mcp/json, status: 200, note: 'NOT this provider — author jespe, repository LogiStic1207/korean-news-mcp, version 0.1.0 (2026-03-28); recorded so the name collision is not mistaken for a first-party package'}

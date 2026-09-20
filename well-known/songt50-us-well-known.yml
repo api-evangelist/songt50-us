@@ -1,0 +1,163 @@
+generated: '2026-09-19'
+method: probed
+source: live GET of the named /.well-known/ path list on every host this record knows
+hit_count: 4
+note: >-
+  Eight hosts are in play. The two A2A hosts (publicdata-agent.songt50.us, news-agent.songt50.us) each serve ONE
+  standard document — the A2A agent card — at both /.well-known/agent-card.json and the legacy
+  /.well-known/agent.json (byte-identical, application/json, 2,284 and 2,007 bytes); every other path on them
+  returns the host's real 404 (9-byte text/plain "Not Found"), so the hits are served documents and not a
+  catch-all. The registrable domain songt50.us answers Cloudflare 522 (origin unreachable) on every path across
+  three retries and www.songt50.us has no DNS record, so nothing can be said about the apex beyond "down". The
+  four MCP resource-server hosts on onrender.com (the RFC 9728 place for oauth-protected-resource metadata)
+  answer HTTP 503 "Service Suspended" (x-render-routing: suspend) on every path, so no OAuth/OIDC, security.txt,
+  api-catalog, ai-plugin, ucp/acp, aauth or apis.json document is reachable there either; Cloudflare then
+  rate-limited the remaining rows of our first burst with 429 challenge pages, which are OUR condition, not the
+  provider's, and a slow re-probe six seconds apart confirmed 503 on the sampled paths. A WellKnown pointer is
+  emitted on the strength of the four served agent-card documents; NO SecurityTxt pointer is emitted because no
+  security.txt is served anywhere. No protected-resource or authorization-server metadata exists on any host,
+  consistent with both the A2A agents and the MCP servers requiring no authentication.
+hosts:
+- host: https://publicdata-agent.songt50.us
+  roles: [a2a-endpoint, a2a-card-host]
+  path_echo_control: passed
+  documents:
+  - {path: /.well-known/agent-card.json, status: 200, content_type: application/json, file: ../a2a/songt50-us-agent-card.json}
+  - {path: /.well-known/agent.json, status: 200, content_type: application/json, file: ../a2a/songt50-us-agent-card.json, note: legacy path; byte-identical}
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/api-catalog.json, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/ucp.json, status: 404}
+  - {path: /.well-known/acp.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+  - {path: /.well-known/apis.json, status: 404}
+  - {path: /apis.json, status: 404}
+  - {path: /apis.yml, status: 404}
+  - {path: /.well-known/mcp.json, status: 404}
+  - {path: /llms.txt, status: 404}
+  - {path: /openapi.json, status: 404}
+  - {path: /robots.txt, status: 200, content_type: text/plain, note: 'Cloudflare-managed "content signals" robots.txt (1,248 bytes), no Disallow lines; not a provider document, not saved'}
+- host: https://news-agent.songt50.us
+  roles: [a2a-endpoint, a2a-card-host]
+  path_echo_control: passed
+  documents:
+  - {path: /.well-known/agent-card.json, status: 200, content_type: application/json, file: ../a2a/songt50-us-news-agent-card.json}
+  - {path: /.well-known/agent.json, status: 200, content_type: application/json, file: ../a2a/songt50-us-news-agent-card.json, note: legacy path; byte-identical}
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/api-catalog.json, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/ucp.json, status: 404}
+  - {path: /.well-known/acp.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+  - {path: /.well-known/apis.json, status: 404}
+  - {path: /apis.json, status: 404}
+  - {path: /apis.yml, status: 404}
+  - {path: /.well-known/mcp.json, status: 404}
+  - {path: /llms.txt, status: 404}
+  - {path: /openapi.json, status: 404}
+  - {path: /robots.txt, status: 200, content_type: text/plain, note: same Cloudflare-managed content-signals file; not saved}
+- host: https://songt50.us
+  roles: [registrable-domain, website]
+  documents:
+  - {path: /, status: 522, note: 'Cloudflare 522 origin unreachable, three retries ~20 s each, 2026-09-19; DNS is two Cloudflare anycast A records, NS luciane/mario.ns.cloudflare.com'}
+  - {path: /.well-known/security.txt, status: 522}
+  - {path: /.well-known/openid-configuration, status: 522}
+  - {path: /.well-known/oauth-authorization-server, status: 522}
+  - {path: /.well-known/oauth-protected-resource, status: 522}
+  - {path: /.well-known/api-catalog, status: 522}
+  - {path: /.well-known/ai-plugin.json, status: 522}
+  - {path: /.well-known/ucp.json, status: 522}
+  - {path: /.well-known/acp.json, status: 522}
+  - {path: /.well-known/aauth-resource.json, status: 522}
+  - {path: /.well-known/apis.json, status: 522}
+  - {path: /apis.json, status: 522}
+  - {path: /apis.yml, status: 522}
+  - {path: /.well-known/agent-card.json, status: 522}
+  - {path: /.well-known/agent.json, status: 522}
+  - {path: /openapi.json, status: 522}
+  - {path: /llms.txt, status: 522}
+- host: https://www.songt50.us
+  roles: [www]
+  documents:
+  - {path: /, status: 0, note: 'no DNS record (curl exit 6, could not resolve host); no path on this host can be probed'}
+- host: https://korean-public-data-mcp.onrender.com
+  roles: [mcp-server, rfc9728-resource-server]
+  documents:
+  - {path: /mcp, status: 503, note: 'text/html "Service Suspended", x-render-routing: suspend — the Render service is suspended host-wide'}
+  - {path: /.well-known/security.txt, status: 503}
+  - {path: /.well-known/openid-configuration, status: 503}
+  - {path: /.well-known/oauth-authorization-server, status: 503}
+  - {path: /.well-known/oauth-protected-resource, status: 429, note: 'Cloudflare "Just a moment" challenge to our burst; host is suspended (503) on every path re-probed slowly'}
+  - {path: /.well-known/api-catalog, status: 429, note: same}
+  - {path: /.well-known/ai-plugin.json, status: 429, note: same}
+  - {path: /.well-known/ucp.json, status: 429, note: same}
+  - {path: /.well-known/acp.json, status: 429, note: same}
+  - {path: /.well-known/aauth-resource.json, status: 429, note: same}
+  - {path: /.well-known/apis.json, status: 429, note: same}
+  - {path: /apis.json, status: 429, note: same}
+  - {path: /apis.yml, status: 429, note: same}
+  - {path: /.well-known/agent-card.json, status: 429, note: same}
+  - {path: /.well-known/agent.json, status: 429, note: same}
+- host: https://korean-news-mcp.onrender.com
+  roles: [mcp-server, rfc9728-resource-server]
+  documents:
+  - {path: /, status: 503, note: 'slow re-probe, 6 s apart: text/html "Service Suspended", x-render-routing: suspend'}
+  - {path: /mcp, status: 503, note: slow re-probe}
+  - {path: /.well-known/security.txt, status: 503, note: slow re-probe}
+  - {path: /.well-known/oauth-protected-resource, status: 503, note: slow re-probe}
+  - {path: /.well-known/openid-configuration, status: 503}
+  - {path: /.well-known/oauth-authorization-server, status: 503}
+  - {path: /.well-known/api-catalog, status: 429, note: Cloudflare challenge to our burst; host suspended}
+  - {path: /.well-known/ai-plugin.json, status: 429, note: same}
+  - {path: /.well-known/ucp.json, status: 429, note: same}
+  - {path: /.well-known/acp.json, status: 429, note: same}
+  - {path: /.well-known/aauth-resource.json, status: 429, note: same}
+  - {path: /.well-known/apis.json, status: 429, note: same}
+  - {path: /apis.json, status: 429, note: same}
+  - {path: /apis.yml, status: 429, note: same}
+  - {path: /.well-known/agent-card.json, status: 429, note: same}
+  - {path: /.well-known/agent.json, status: 429, note: same}
+- host: https://korean-stock-mcp.onrender.com
+  roles: [mcp-server, rfc9728-resource-server]
+  documents:
+  - {path: /mcp, status: 503, note: 'text/html "Service Suspended", x-render-routing: suspend'}
+  - {path: /.well-known/security.txt, status: 503}
+  - {path: /.well-known/openid-configuration, status: 503}
+  - {path: /.well-known/oauth-authorization-server, status: 503}
+  - {path: /.well-known/oauth-protected-resource, status: 429, note: Cloudflare challenge to our burst; host suspended}
+  - {path: /.well-known/api-catalog, status: 429, note: same}
+  - {path: /.well-known/ai-plugin.json, status: 429, note: same}
+  - {path: /.well-known/ucp.json, status: 429, note: same}
+  - {path: /.well-known/acp.json, status: 429, note: same}
+  - {path: /.well-known/aauth-resource.json, status: 429, note: same}
+  - {path: /.well-known/apis.json, status: 429, note: same}
+  - {path: /apis.json, status: 429, note: same}
+  - {path: /apis.yml, status: 429, note: same}
+  - {path: /.well-known/agent-card.json, status: 429, note: same}
+  - {path: /.well-known/agent.json, status: 429, note: same}
+- host: https://korean-agriculture-mcp.onrender.com
+  roles: [mcp-server, rfc9728-resource-server]
+  documents:
+  - {path: /mcp, status: 503, note: 'text/html "Service Suspended", x-render-routing: suspend'}
+  - {path: /.well-known/security.txt, status: 503}
+  - {path: /.well-known/openid-configuration, status: 503}
+  - {path: /.well-known/oauth-authorization-server, status: 503}
+  - {path: /.well-known/oauth-protected-resource, status: 429, note: Cloudflare challenge to our burst; host suspended}
+  - {path: /.well-known/api-catalog, status: 429, note: same}
+  - {path: /.well-known/ai-plugin.json, status: 429, note: same}
+  - {path: /.well-known/ucp.json, status: 429, note: same}
+  - {path: /.well-known/acp.json, status: 429, note: same}
+  - {path: /.well-known/aauth-resource.json, status: 429, note: same}
+  - {path: /.well-known/apis.json, status: 429, note: same}
+  - {path: /apis.json, status: 429, note: same}
+  - {path: /apis.yml, status: 429, note: same}
+  - {path: /.well-known/agent-card.json, status: 429, note: same}
+  - {path: /.well-known/agent.json, status: 429, note: same}

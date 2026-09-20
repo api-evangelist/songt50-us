@@ -1,0 +1,26 @@
+generated: '2026-09-19'
+method: searched
+source: registry searches 2026-09-19
+package_count: 0
+packages: []
+searched:
+- {registry: npm, query: 'https://registry.npmjs.org/-/v1/search?text=sapjilcoding&size=10', result: 0 packages}
+- {registry: npm, query: 'https://registry.npmjs.org/-/v1/search?text=korean-news-mcp&size=10', result: 'no package of that name; only unrelated fuzzy matches (korean-law-mcp by another author, etc.)'}
+- {registry: pypi, query: 'https://pypi.org/pypi/korean-news-mcp/json', status: 200, result: 'NOT this provider — author jespe, project_urls github.com/LogiStic1207/korean-news-mcp, version 0.1.0 published 2026-03-28; a name collision with a different Korean-news MCP server. Not linked.'}
+- {registry: pypi, query: 'https://pypi.org/pypi/korean-public-data-mcp/json', status: 404}
+- {registry: pypi, query: 'https://pypi.org/pypi/sapjilcoding/json', status: 404}
+- {registry: github, query: 'https://api.github.com/search/repositories?q=%22korean+news+mcp%22', result: '1 repository: SongT-50/korean-news-mcp — this provider'}
+- {registry: github-user, query: 'https://github.com/SongT-50', result: 'this provider (32 public repositories, created 2024-06-29); the four MCP server repositories below'}
+- {registry: mcp-registry, query: 'https://registry.modelcontextprotocol.io/v0/servers?search=io.github.SongT-50', result: 'four servers, each with a streamable-http remote and NO packages[] entry — no npm/PyPI/OCI distribution is declared'}
+source_distributions:
+- {name: korean-public-data-mcp, kind: mcp-server, language: python, url: https://github.com/SongT-50/korean-public-data-mcp, install: 'git clone https://github.com/SongT-50/korean-public-data-mcp.git && pip install -r requirements.txt && python server.py', license: MIT, version: null, published: null, note: 'no tagged release and no registry package — version and date cannot be read; default branch master, last push 2026-03-08 (GitHub repos listing)'}
+- {name: korean-news-mcp, kind: mcp-server, language: python, url: https://github.com/SongT-50/korean-news-mcp, install: 'git clone https://github.com/SongT-50/korean-news-mcp.git && pip install -r requirements.txt && python server.py', license: MIT, version: null, published: null, note: 'no tagged release; last push 2026-03-08'}
+- {name: korean-stock-mcp, kind: mcp-server, language: python, url: https://github.com/SongT-50/korean-stock-mcp, install: 'git clone https://github.com/SongT-50/korean-stock-mcp.git && pip install -r requirements.txt && python server.py', license: not stated, version: null, published: null, note: 'no README, LICENSE or tagged release; last push 2026-03-08'}
+- {name: korean-agriculture-mcp, kind: mcp-server, language: python, url: https://github.com/SongT-50/korean-agriculture-mcp, install: 'git clone https://github.com/SongT-50/korean-agriculture-mcp.git && pip install -r requirements.txt && python server.py', license: MIT, version: null, published: null, note: 'no tagged release; last push 2026-03-08'}
+note: >-
+  sapjilcoding publishes no client library, SDK or CLI in any registry searched. Its four MCP servers are
+  distributed as source only (clone and run python server.py) and as hosted Streamable HTTP endpoints; the
+  official MCP registry entries declare remotes but no packages. The only registry hit for a matching name,
+  PyPI korean-news-mcp, belongs to a different author and is recorded above so it is not mistaken for a
+  first-party package. No Packages or SDKs pointer is emitted; the source repositories are pointed at from
+  apis.yml as SourceCode.

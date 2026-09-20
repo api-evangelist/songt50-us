@@ -1,0 +1,160 @@
+generated: '2026-09-19'
+method: probed
+source: https://publicdata-agent.songt50.us/.well-known/agent.json
+notes: >-
+  sapjilcoding (삽질코딩 — the maker brand of Song Tae-Eun, GitHub SongT-50, MCPize handle higheun) serves TWO A2A
+  Agent Cards from two subdomains of its own registrable domain songt50.us. Both are live, anonymous JSON-RPC
+  agents: the Korean Public Data Agent (weather, air quality, apartment prices, Bank of Korea statistics, business
+  registration checks) at publicdata-agent.songt50.us and the Korean News Agent (Korean and global tech news, keyword
+  search, trending, daily briefing — "Powered by Korean News MCP") at news-agent.songt50.us. Each host serves the
+  identical document at BOTH the canonical /.well-known/agent-card.json and the legacy /.well-known/agent.json;
+  every other /.well-known/ path on those hosts returns a 9-byte text/plain "Not Found" 404, so the 200s are served
+  documents and not a catch-all. The apex songt50.us answers Cloudflare 522 (origin unreachable) on every path and
+  www.songt50.us does not resolve, so the agent subdomains are the provider's only reachable web surface. Ownership
+  is not in question: provider.organization is "sapjilcoding" in both cards, provider.url is the serving host, the
+  a2aregistry.org records name the author sapjilcoding, and the companion GitHub repositories carry LICENSE
+  "Copyright (c) 2026 sapjil-coding" and credit the 삽질코딩 YouTube channel.
+discovery:
+  path: /.well-known/agent.json
+  canonical: false
+  host: publicdata-agent.songt50.us
+  note: >-
+    Recorded at the legacy path because that is the wellKnownURI the provider registered on a2aregistry.org (the
+    lead this profile came from) and the first URL fetched; the canonical /.well-known/agent-card.json serves a
+    byte-identical document on both hosts (2,284 and 2,007 bytes respectively).
+card:
+  name: Korean Public Data Agent
+  url: https://publicdata-agent.songt50.us
+  version: 1.0.0
+  skills: 5
+  file: songt50-us-agent-card.json
+cards:
+- file: songt50-us-agent-card.json
+  primary: true
+  host: publicdata-agent.songt50.us
+  url: https://publicdata-agent.songt50.us/.well-known/agent.json
+  canonical_url: https://publicdata-agent.songt50.us/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+  body_bytes: 2284
+  name: Korean Public Data Agent
+  agent_url: https://publicdata-agent.songt50.us
+  protocol_version: 0.3.0
+  preferred_transport: JSONRPC
+  version: 1.0.0
+  grade: conformant
+  checks:
+    capabilities_is_object: true
+    protocol_version_present: true
+    skills_is_array: true
+    preferred_transport_present: true
+    default_input_modes_present: true
+    default_output_modes_present: true
+  capabilities:
+    streaming: false
+    pushNotifications: false
+    stateTransitionHistory: false
+  security: none declared (no securitySchemes / security in the card; JSON-RPC answered anonymously)
+  skills:
+  - {id: weather, name: Korea Weather Forecast, tags: [weather, forecast, korea, temperature]}
+  - {id: air_quality, name: Korea Air Quality, tags: [air, quality, pm25, pollution, korea]}
+  - {id: real_estate, name: Korea Apartment Prices, tags: [real-estate, apartment, price, korea, property]}
+  - {id: economic_stats, name: Korea Economic Statistics, tags: [economy, statistics, interest-rate, exchange-rate, kospi]}
+  - {id: business_check, name: Business Registration Check, tags: [business, registration, verification, korea]}
+- file: songt50-us-news-agent-card.json
+  primary: false
+  host: news-agent.songt50.us
+  url: https://news-agent.songt50.us/.well-known/agent.json
+  canonical_url: https://news-agent.songt50.us/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+  body_bytes: 2007
+  name: Korean News Agent
+  agent_url: https://news-agent.songt50.us
+  protocol_version: 0.3.0
+  preferred_transport: JSONRPC
+  version: 1.0.0
+  grade: conformant
+  checks:
+    capabilities_is_object: true
+    protocol_version_present: true
+    skills_is_array: true
+    preferred_transport_present: true
+    default_input_modes_present: true
+    default_output_modes_present: true
+  capabilities:
+    streaming: false
+    pushNotifications: false
+    stateTransitionHistory: false
+  security: none declared (no securitySchemes / security in the card; JSON-RPC answered anonymously)
+  skills:
+  - {id: korean_news, name: Korean News Search, tags: [news, korean, search, korea]}
+  - {id: tech_news, name: Global Tech News, tags: [tech, ai, global, trends]}
+  - {id: news_search, name: Keyword News Search, tags: [search, keyword, query]}
+  - {id: trending, name: Trending Headlines, tags: [trending, headlines, breaking]}
+  - {id: daily_briefing, name: Daily News Briefing, tags: [briefing, daily, summary]}
+conformance:
+  spec: A2A 1.0.0
+  grade: conformant
+  protocol_version: 0.3.0
+  preferred_transport: JSONRPC
+  hard_checks:
+    capabilities_is_object: true
+    protocol_version_present: true
+    skills_is_array: true
+  optional_fields:
+    preferred_transport: true
+    default_input_modes: true
+    default_output_modes: true
+  grade_basis: >-
+    Both cards pass all three hard checks — capabilities is an OBJECT (streaming, pushNotifications,
+    stateTransitionHistory), protocolVersion is present ("0.3.0"), skills is an ARRAY (5 fully populated skills each,
+    with id, name, description, tags, examples, inputModes and outputModes) — and carry every optional field the
+    grade looks for (preferredTransport JSONRPC, defaultInputModes and defaultOutputModes text/plain). Both hosts
+    are live JSON-RPC 2.0 responders: tasks/get for an unknown id returns the A2A-defined -32001 "Task not found";
+    agent/getAuthenticatedExtendedCard returns -32603 "Authenticated card not supported", consistent with no
+    extended card being declared. a2aregistry.org's own validator also reports conformance true for both.
+  deviations:
+  - field: protocolVersion
+    observed: '0.3.0'
+    note: The card is written to the 0.3.x shape (top-level url + preferredTransport); it declares no additionalInterfaces and is not declared against A2A 1.0.0. No hard check fails.
+  - field: securitySchemes / security
+    observed: absent on both cards
+    note: Anonymous access is the actual behaviour (probed), so the omission is accurate rather than misleading; an agent cannot learn any quota or abuse policy from the card because none is published.
+  - field: documentationUrl / iconUrl
+    observed: absent
+    note: No human documentation is linked from either card; the nearest provider-authored documentation is the companion GitHub repository README for each data surface.
+  - field: url
+    observed: the host root (https://publicdata-agent.songt50.us, https://news-agent.songt50.us)
+    note: The JSON-RPC endpoint is the origin itself; a GET on it returns 405 Method Not Allowed (text/plain).
+  - field: message/send task conformance
+    observed: not exercised by this pipeline; a2aregistry.org's task_conformance check on 2026-09-19 recorded category TIMEOUT (16.3 s) for both agents, while its maintainer note says "Verified working. Agent responds to message/send correctly via the A2A SDK."
+    note: Third-party observation recorded because it bears on whether a stock client completes a task; the registry also reports 24-hour uptime of 39% for both agents on 2026-09-20. API Evangelist sent no message.
+x-evidence:
+  fetched: '2026-09-19'
+  url: https://publicdata-agent.songt50.us/.well-known/agent.json
+  http_status: 200
+  content_type: application/json
+  body_bytes: 2284
+  body_parses_as: JSON object with AgentCard shape (capabilities, defaultInputModes, defaultOutputModes, description, name, preferredTransport, protocolVersion, provider, skills, url, version)
+  corroborating_probes:
+  - {url: https://publicdata-agent.songt50.us/.well-known/agent-card.json, http_status: 200, note: byte-identical to the legacy path}
+  - {url: https://news-agent.songt50.us/.well-known/agent.json, http_status: 200, content_type: application/json, body_bytes: 2007}
+  - {url: https://news-agent.songt50.us/.well-known/agent-card.json, http_status: 200, note: byte-identical to the legacy path}
+  - {url: https://publicdata-agent.songt50.us/.well-known/security.txt, http_status: 404, note: 9-byte text/plain "Not Found" — the host's real 404, so the agent card 200 is a served document, not a catch-all}
+  - {url: https://publicdata-agent.songt50.us/, method: GET, http_status: 405, note: Method Not Allowed; the JSON-RPC endpoint is POST-only}
+  - {url: https://publicdata-agent.songt50.us/, method: POST, body: '{"jsonrpc":"2.0","id":1,"method":"tasks/get","params":{"id":"apievangelist-nonexistent-probe"}}', http_status: 200, response: '{"error":{"code":-32001,"message":"Task not found"},"id":1,"jsonrpc":"2.0"}', note: A real A2A JSON-RPC responder; no message was sent}
+  - {url: https://publicdata-agent.songt50.us/, method: POST, body: '{"jsonrpc":"2.0","id":1,"method":"agent/getAuthenticatedExtendedCard"}', http_status: 200, response: '{"error":{"code":-32603,"message":"Authenticated card not supported"},"id":1,"jsonrpc":"2.0"}'}
+  - {url: https://news-agent.songt50.us/, method: POST, body: '{"jsonrpc":"2.0","id":1,"method":"tasks/get","params":{"id":"apievangelist-nonexistent-probe"}}', http_status: 200, response: '{"error":{"code":-32001,"message":"Task not found"},"id":1,"jsonrpc":"2.0"}'}
+  - {url: https://songt50.us/.well-known/agent-card.json, http_status: 522, note: Cloudflare 522 origin unreachable on every apex path across three retries; www.songt50.us has no DNS record}
+  - {url: https://a2aregistry.org/api/agents/13b680b9-0053-4b51-8e21-7f19df99cafc, http_status: 200, note: registry record for the Korean Public Data Agent (created 2026-03-07, author sapjilcoding, wellKnownURI the legacy agent.json path, conformance true, uptime 39% / is_healthy true on 2026-09-20)}
+  - {url: https://a2aregistry.org/api/agents/44041f0f-6d82-410c-bc9f-4e0755b123f4, http_status: 200, note: registry record for the Korean News Agent (created 2026-03-07, same author and health profile)}
+surface_relationship:
+  note: >-
+    The two agents are conversational fronts over the same data the provider ships as four open-source MCP servers
+    (github.com/SongT-50/korean-public-data-mcp, korean-news-mcp, korean-stock-mcp, korean-agriculture-mcp; see
+    mcp/songt50-us-mcp.yml). The public-data agent's five skills map one-to-one onto the public-data MCP server's
+    five data tools (weather, air quality, real-estate trades, economic stats, business registration), and the news
+    agent's five skills onto five of the six news MCP tools (read_article has no A2A skill). The A2A hosts on
+    songt50.us were live on 2026-09-19; the four hosted MCP endpoints on onrender.com were all suspended (503,
+    x-render-routing: suspend). No OpenAPI, GraphQL, AsyncAPI, gRPC or SOAP contract is published anywhere.
