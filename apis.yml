@@ -27,11 +27,11 @@ tags:
 - News
 - Weather
 - Air Quality
-- Real Estate
+- Real-Estate
 - Economic Statistics
 - Stock Market
 - Agriculture
-- Korea
+- South Korea
 - agent-native
 tags_raw:
 - Agents
@@ -48,6 +48,7 @@ tags_raw:
 - Agriculture
 - Korea
 - Agent-native
+- Real Estate
 apis:
 - aid: songt50-us:korean-public-data-agent
   name: Korean Public Data Agent (A2A)
@@ -61,6 +62,14 @@ apis:
   humanURL: https://github.com/SongT-50/korean-public-data-mcp
   baseURL: https://publicdata-agent.songt50.us
   tags:
+  - A2A
+  - Open Data
+  - Weather
+  - Air Quality
+  - Real-Estate
+  - Economic Statistics
+  - agent-native
+  tags_raw:
   - A2A
   - Open Data
   - Weather
@@ -93,6 +102,11 @@ apis:
   tags:
   - A2A
   - News
+  - South Korea
+  - agent-native
+  tags_raw:
+  - A2A
+  - News
   - Korea
   - agent-native
   properties:
@@ -121,6 +135,15 @@ apis:
   humanURL: https://github.com/SongT-50/korean-public-data-mcp
   baseURL: https://korean-public-data-mcp.onrender.com/mcp
   tags:
+  - MCP
+  - Open Data
+  - Government Data
+  - Weather
+  - Air Quality
+  - Real-Estate
+  - Economic Statistics
+  - agent-native
+  tags_raw:
   - MCP
   - Open Data
   - Government Data
@@ -161,6 +184,11 @@ apis:
   tags:
   - MCP
   - News
+  - South Korea
+  - agent-native
+  tags_raw:
+  - MCP
+  - News
   - Korea
   - agent-native
   properties:
@@ -198,6 +226,12 @@ apis:
   - MCP
   - Stock Market
   - Open Data
+  - South Korea
+  - agent-native
+  tags_raw:
+  - MCP
+  - Stock Market
+  - Open Data
   - Korea
   - agent-native
   properties:
@@ -224,6 +258,12 @@ apis:
   humanURL: https://github.com/SongT-50/korean-agriculture-mcp
   baseURL: https://korean-agriculture-mcp.onrender.com/mcp
   tags:
+  - MCP
+  - Agriculture
+  - Open Data
+  - South Korea
+  - agent-native
+  tags_raw:
   - MCP
   - Agriculture
   - Open Data
