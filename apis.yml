@@ -9,6 +9,24 @@ description: 'sapjilcoding (삽질코딩, GitHub SongT-50) is a Korean independe
   MIT) — wrap data.go.kr, AirKorea, Bank of Korea ECOS, KRX and the national wholesale-market auction feed. Every
   surface is read-only, anonymous and free; no OpenAPI or REST contract exists. On 2026-09-19 both A2A agents were
   live while all four hosted MCP endpoints were suspended (HTTP 503) and the apex site returned Cloudflare 522.'
+deliveryModel:
+  model: saas
+  license_evidence:
+    not_product:
+    - songt-50/korean-agriculture-mcp
+    - songt-50/korean-news-mcp
+    - songt-50/korean-public-data-mcp
+    - songt-50/korean-stock-mcp
+  open_source: unknown
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: low
+  source:
+  - pricing
+  - repository-not-product
+  generated: '2026-09-25'
+  method: derived
 image: https://raw.githubusercontent.com/SongT-50/korean-public-data-mcp/master/assets/logo.svg
 url: https://raw.githubusercontent.com/api-evangelist/songt50-us/refs/heads/main/apis.yml
 x-type: company
@@ -27,12 +45,12 @@ tags:
 - News
 - Weather
 - Air Quality
-- Real-Estate
+- Real Estate
 - Economic Statistics
 - Stock Market
 - Agriculture
 - South Korea
-- agent-native
+- Agent-Native
 tags_raw:
 - Agents
 - A2A
@@ -49,6 +67,8 @@ tags_raw:
 - Korea
 - Agent-native
 - Real Estate
+- agent-native
+- Real-Estate
 apis:
 - aid: songt50-us:korean-public-data-agent
   name: Korean Public Data Agent (A2A)
@@ -66,9 +86,9 @@ apis:
   - Open Data
   - Weather
   - Air Quality
-  - Real-Estate
+  - Real Estate
   - Economic Statistics
-  - agent-native
+  - Agent-Native
   tags_raw:
   - A2A
   - Open Data
@@ -77,6 +97,7 @@ apis:
   - Real Estate
   - Economic Statistics
   - agent-native
+  - Real-Estate
   properties:
   - type: AgentCard
     url: a2a/songt50-us-a2a.yml
@@ -103,7 +124,7 @@ apis:
   - A2A
   - News
   - South Korea
-  - agent-native
+  - Agent-Native
   tags_raw:
   - A2A
   - News
@@ -140,9 +161,9 @@ apis:
   - Government Data
   - Weather
   - Air Quality
-  - Real-Estate
+  - Real Estate
   - Economic Statistics
-  - agent-native
+  - Agent-Native
   tags_raw:
   - MCP
   - Open Data
@@ -152,6 +173,7 @@ apis:
   - Real Estate
   - Economic Statistics
   - agent-native
+  - Real-Estate
   properties:
   - type: MCPServer
     url: mcp/songt50-us-mcp.yml
@@ -185,7 +207,7 @@ apis:
   - MCP
   - News
   - South Korea
-  - agent-native
+  - Agent-Native
   tags_raw:
   - MCP
   - News
@@ -227,7 +249,7 @@ apis:
   - Stock Market
   - Open Data
   - South Korea
-  - agent-native
+  - Agent-Native
   tags_raw:
   - MCP
   - Stock Market
@@ -262,7 +284,7 @@ apis:
   - Agriculture
   - Open Data
   - South Korea
-  - agent-native
+  - Agent-Native
   tags_raw:
   - MCP
   - Agriculture
