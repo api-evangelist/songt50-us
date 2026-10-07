@@ -311,6 +311,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Pricing
+  url: https://raw.githubusercontent.com/SongT-50/korean-news-mcp/master/mcpize.yaml
 - type: Website
   url: https://songt50.us/
 - type: GitHubOrganization
